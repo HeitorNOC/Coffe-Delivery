@@ -1,10 +1,10 @@
-import { CurrencyDollar, MapPinLine } from "phosphor-react";
+import { Bank, CreditCard, CurrencyDollar, MapPinLine, Money } from "phosphor-react";
 import { CheckoutContainer, Left, Right, TextDiv, Wrapper } from "./styles";
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
-import InputMask from 'react-input-mask'
 import { NewPaymentForm } from "./Components/NewPaymentForm";
+import { CardCheckout } from "./Components/CardCheckout";
 
 
 const newCycleFormValidationSchema = zod.object({
@@ -45,7 +45,7 @@ export function Checkout() {
               <Left>
                 <div className="LeftUpper">
                   <MapPinLine color="#C47F17" size={22} />
-                  <div>
+                  <div className="LeftUpperText">
                     <h4>Endereço de Entrega</h4>
                     <p>Informe o endereço onde deseja receber seu pedido</p>
                   </div>
@@ -58,23 +58,41 @@ export function Checkout() {
                   </div>
                   <div className="down">
                     <div>
-
+                      <CreditCard />
+                      <p>Cartão de crédito</p>
                     </div>
                     <div>
-
+                      <Bank />
+                      <p>Cartão de débito</p>
                     </div>
                     <div>
-                      
+                      <Money />
+                      <p>Dinheiro</p>
                     </div>
                   </div>
                 </div>
               </Left>
               <Right>
                 <div>
-
+                  <CardCheckout />
+                  <CardCheckout />
                 </div>
                 <div>
-
+                  <div>
+                    <p>Total de itens</p>
+                    <span>R$ 29,70</span>
+                  </div>
+                  <div>
+                    <p>Entrega</p>
+                    <span>R$ 3,50</span>
+                  </div>
+                  <div>
+                    <h2>Total</h2>
+                    <span>R$ 33,20</span>
+                  </div>
+                  
+                  
+                  <button type="submit">confirmar pedido</button>
                 </div>
               </Right>
 
