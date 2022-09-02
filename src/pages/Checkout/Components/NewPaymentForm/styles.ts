@@ -24,6 +24,13 @@ export const FormContainer = styled.div`
       color: ${(props) => props.theme['base-label']}
     }
   }
+
+  label {
+    font-size: 12px;
+    color: ${(props) => props.theme['base-label']};
+    font-style: italic;
+    padding: 0.75rem 0;
+  }
 `
 
 const BaseInput = styled.input`

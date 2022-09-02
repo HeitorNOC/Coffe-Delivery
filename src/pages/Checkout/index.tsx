@@ -1,5 +1,5 @@
 import { Bank, CreditCard, CurrencyDollar, MapPinLine, Money } from "phosphor-react";
-import { CheckoutContainer, Left, Right, TextDiv, Wrapper } from "./styles";
+import { CheckoutContainer, ConfirmButton, Left, Right, TextDiv, Wrapper } from "./styles";
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
@@ -37,7 +37,7 @@ export function Checkout() {
       <CheckoutContainer>
         <TextDiv>
           <h2>Complete seu pedido</h2>
-          <h2>Cafés selecionados</h2>
+          <h2 className="right">Cafés selecionados</h2>
         </TextDiv>
         <Wrapper>
           <form>
@@ -51,22 +51,25 @@ export function Checkout() {
                   </div>
                 </div>
                   <NewPaymentForm />
-                <div>
+                <div className="LeftDown">
                   <div className="upper">
-                    <span><CurrencyDollar /> Pagamento</span>
-                    <p>O pagamento é feito na entrega. Escolha a forma que deseja pagar</p>
+                    <CurrencyDollar size={22} color="#8047F8"/>
+                    <div className="upperText">
+                      <h4>Pagamento</h4>
+                      <p>O pagamento é feito na entrega. Escolha a forma que deseja pagar</p>
+                    </div>
                   </div>
                   <div className="down">
                     <div>
-                      <CreditCard />
+                      <CreditCard size={16} color="#8047F8"/>
                       <p>Cartão de crédito</p>
                     </div>
                     <div>
-                      <Bank />
+                      <Bank size={16} color="#8047F8"/>
                       <p>Cartão de débito</p>
                     </div>
                     <div>
-                      <Money />
+                      <Money size={16} color="#8047F8"/>
                       <p>Dinheiro</p>
                     </div>
                   </div>
@@ -75,24 +78,23 @@ export function Checkout() {
               <Right>
                 <div>
                   <CardCheckout />
-                  <CardCheckout />
                 </div>
-                <div>
-                  <div>
+                <div className="rightDown">
+                  <div className="rightDownUp">
                     <p>Total de itens</p>
                     <span>R$ 29,70</span>
                   </div>
-                  <div>
+                  <div className="rightDownMid">
                     <p>Entrega</p>
                     <span>R$ 3,50</span>
                   </div>
-                  <div>
+                  <div className="rightDownDown">
                     <h2>Total</h2>
                     <span>R$ 33,20</span>
                   </div>
                   
                   
-                  <button type="submit">confirmar pedido</button>
+                  <ConfirmButton type="submit">CONFIRMAR PEDIDO</ConfirmButton>
                 </div>
               </Right>
 
