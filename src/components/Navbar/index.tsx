@@ -6,12 +6,13 @@ export function Navbar() {
   return (
     <Container>
       <Left>
-        <a href="#"><img src={Logo} alt="Logo" /></a>
+        <a href="/"><img src={Logo} alt="Logo" /></a>
       </Left>
       <Right>
         <MapPin color="#8047F8" size={22} weight="fill"/>
         <p>Porto Alegre, RS</p>
-        <ShoppingCart size={22} color="#C47F17" weight="fill"/>
+        <a href="/checkout"><ShoppingCart size={22} color="#C47F17" weight="fill"/></a>
+        
       </Right>
     </Container>
   )

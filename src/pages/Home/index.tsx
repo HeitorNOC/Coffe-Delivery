@@ -17,9 +17,11 @@ import Irlandes from '../../assets/Irlandes.svg'
 import Latte from '../../assets/Latte.svg'
 import Macchiato from '../../assets/Macchiato.svg'
 import Mochaccino from '../../assets/Mochaccino.svg'
+import { useContext } from "react";
+import { CartContext } from "../../context/CartContext";
 
 export function Home() {
-
+  const { quantity } = useContext(CartContext)
   return (
     <>
       <MainContainer>

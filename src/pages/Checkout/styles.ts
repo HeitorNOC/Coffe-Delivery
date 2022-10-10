@@ -81,10 +81,15 @@ export const Left = styled.div`
       align-items: center;
       justify-content: center;
       div {
-        display: flex;
-        padding: 16px;
-        gap: 12px;
-        align-items: center;
+
+
+        &:hover {
+          border: 1px solid #8047F8;
+          border-radius: 6px;
+        }
+        &::selection {
+          
+        }
       }
     } 
   }
@@ -163,4 +168,70 @@ export const ConfirmButton = styled.button`
   cursor: pointer;
 
 
+`
+
+export const EmptyContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -6.25rem;
+    color: ${(props) => props.theme['base-subtitle']};
+  }
+`
+
+export const CardContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 8px 4px;
+  gap: 59px;
+  
+  margin-bottom: 1.5rem;
+`
+
+export const LeftCard = styled.div`
+  img {
+    width: 64px;
+    margin-right: -20px;
+  }
+`
+
+export const MidCard = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  p {
+    color: ${(props) => props.theme['base-subtitle']};
+    white-space: nowrap;
+    margin-bottom: 1rem;
+    font-weight: 400;
+  }
+  div.MidDown {
+    display: flex;    
+    gap: 8px;
+
+    span.text {
+      color: ${(props) => props.theme['base-title']};
+    } 
+    p {
+      color: ${(props) => props.theme['base-text']};
+      font-size: 0.75rem;
+    }
+  } 
+`
+
+export const RightCard = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  span {
+    font-weight: 700;
+  }
 `
