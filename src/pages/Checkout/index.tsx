@@ -10,16 +10,16 @@ import { CartContext } from "../../context/CartContext";
 
 
 const newCycleFormValidationSchema = zod.object({
-  cep: zod.number(),
+  cep: zod.string(),
   rua: zod.string().min(1, 'Informe a Rua'),
-  num: zod.number(),
+  num: zod.string(),
   comp: zod.string().optional(),
   bairro: zod.string().min(1, 'Informe o Bairro'),
   cidade: zod.string().min(1, 'Informe a Cidade'),
   uf: zod.string().min(1, 'Informe o Estado').max(2, 'Informe o Estado'),
-  cred: zod.boolean(),
-  bank: zod.boolean(),
-  cash: zod.boolean()
+  cred: zod.boolean().optional(),
+  bank: zod.boolean().optional(),
+  cash: zod.boolean().optional(),
 })
 
 type NewFormPaymentData = zod.infer<typeof newCycleFormValidationSchema>
@@ -49,6 +49,7 @@ export function Checkout() {
   const { handleSubmit, watch, reset, register } = newPaymentForm
 
   function handleFormDispatch(data: NewFormPaymentData) {
+    console.log(data)
     paymentFormDispatch(data)
     reset()
   }
@@ -76,6 +77,9 @@ export function Checkout() {
   const isSelected2 = selected2 ? style2 : style1
   const isSelected3 = selected3 ? style2 : style1
 
+  const onSubmit = (data:any, e:any) => console.log(data, e);
+  const onError = (errors:any, e:any) => console.log(errors, e);
+
   return (
     <>
       <CheckoutContainer>
@@ -84,7 +88,7 @@ export function Checkout() {
           <h2 className="right">Cafés selecionados</h2>
         </TextDiv>
         <Wrapper>
-          <form onSubmit={handleSubmit(handleFormDispatch)}>
+          <form onSubmit={handleSubmit(onSubmit, onError)}>
             <FormProvider {...newPaymentForm}>
               <Left>
                 <div className="LeftUpper">
@@ -106,8 +110,7 @@ export function Checkout() {
                   <div className="down">
                     <div
                       style={isSelected1}
-                      id="cred"
-                      {...register("cred")}
+                      
                       onClick={
                         () => {
                           if (selected1 == false) {
@@ -120,13 +123,20 @@ export function Checkout() {
                         }
                       }
                     >
+                      <input 
+                        type="radio"
+                        id="cred"
+                        {...register("cred")}
+                        name="payment" 
+                        value="cred"
+                        
+                      />
                       <CreditCard size={16} color="#8047F8" />
                       <p>Cartão de crédito</p>
                     </div>
                     <div
                       style={isSelected2}
-                      id="bank"
-                      {...register("bank")}
+                      
                       onClick={
                         () => {
                           if (selected2 == false) {
@@ -139,13 +149,20 @@ export function Checkout() {
                         }
                       }
                     >
+                      <input 
+                        type="radio"
+                        id="bank"
+                        {...register("bank")}
+                        name="payment"
+                        value="bank"
+                        
+                      />
                       <Bank size={16} color="#8047F8" />
                       <p>Cartão de débito</p>
                     </div>
                     <div
                       style={isSelected3}
-                      id="cash"
-                      {...register("cash")}
+                      
                       onClick={
                         () => {
                           if (selected3 == false) {
@@ -158,6 +175,13 @@ export function Checkout() {
                         }
                       }
                     >
+                      <input 
+                        type="radio" 
+                        id="cash"
+                        {...register("cash")}
+                        name="payment"
+                        value="cash"
+                      />
                       <Money size={16} color="#8047F8" />
                       <p>Dinheiro</p>
                     </div>
@@ -228,7 +252,7 @@ export function Checkout() {
                   </div>
 
 
-                  <ConfirmButton type="submit">CONFIRMAR PEDIDO</ConfirmButton>
+                  <ConfirmButton type="submit"> CONFIRMAR PEDIDO</ConfirmButton>
                 </div>
               </Right>
 

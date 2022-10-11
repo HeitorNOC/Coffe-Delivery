@@ -93,6 +93,7 @@ export const Left = styled.div`
       }
     } 
   }
+
 `
 
 export const Right = styled.div`
@@ -158,7 +159,7 @@ export const ConfirmButton = styled.button`
   background: ${(props) => props.theme['yellow']};
   border-radius: 6px;
   border: none;
-
+  text-decoration: none;
   
 
   color: ${(props) => props.theme['white']};

@@ -18,22 +18,23 @@ interface CreateItemData {
 }
 
 interface CreatePaymentInfoData {
-  cep: number
+  cep: string
   rua: string
-  num: number
+  num: string
   comp?: string | undefined
   bairro: string
   cidade: string
   uf: string
-  cred: boolean | undefined | string
-  bank: boolean | undefined | string
-  cash: boolean | undefined | string
+  cred?: boolean | undefined | string
+  bank?: boolean | undefined | string
+  cash?: boolean | undefined | string
 }
 
 interface CartContextType {
   cart: Item[]
   name: string
   quantity: number
+  paymentData: CreatePaymentInfoData
   addNewItem: (data: CreateItemData) => void | MouseEventHandler<SVGSVGElement>
   removeItem: (name: string) => void | MouseEventHandler<SVGSVGElement>
   increaseItem: (data: CreateItemData) => void | MouseEventHandler<SVGSVGElement>
@@ -54,6 +55,7 @@ export function CartContextProvider({
     cart: [],
     name: '',
     quantity: 0,
+    paymentData : {}
   }
   const [cartState, dispatch] = useReducer(
     itemsReducer,
@@ -69,7 +71,7 @@ export function CartContextProvider({
     },
   )
 
-  const { cart, name, quantity } = cartState
+  const { cart, name, quantity, paymentData } = cartState
   
 
   useEffect(() => {
@@ -176,6 +178,7 @@ export function CartContextProvider({
         quantity,
         cart,
         name,
+        paymentData,
         addNewItem,
         increaseItem,
         decreaseItem,

@@ -12,9 +12,9 @@ export interface Item {
 }
 
 export interface PaymentInfo {
-  cep: number
+  cep: string
   rua: string
-  num: number
+  num: string
   comp: string | undefined
   bairro: string
   cidade: string
@@ -77,7 +77,7 @@ export function itemsReducer(state: ItemState, action: any) {
       })
     case ActionTypes.PAYMENT_FORM_DATA_DISPATCH:
       return produce(state, (draft) => {
-        return draft.paymentData = action.payload.data
+        return Object.assign(draft.paymentData, action.payload.data)
       })
     default:
       return state
