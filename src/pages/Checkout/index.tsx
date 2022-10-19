@@ -46,6 +46,7 @@ export function Checkout() {
     
     paymentFormDispatch(data)
     reset()
+    navigate('/success')
   }
   let count = 0
   let priceTotal = 0
@@ -236,7 +237,7 @@ export function Checkout() {
                   </div>
 
 
-                  <ConfirmButton type="submit" onClick={() => navigate('/success')} > CONFIRMAR PEDIDO</ConfirmButton>
+                  <ConfirmButton type="submit"  > CONFIRMAR PEDIDO</ConfirmButton>
                 </div>
               </Right>
 
