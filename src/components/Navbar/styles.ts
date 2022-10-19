@@ -22,4 +22,20 @@ export const Right  =  styled.div`
     padding: 0 20px 0 4px;
     color: ${(props) => props.theme['purple-dark']};
   }
+
+  .circle {
+    display: flex;
+    position: absolute;
+    margin-left: 190px;
+    margin-top: -45px;
+    align-items: center;
+    justify-content: center;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #C47F17;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-family: 'Baloo 2';
+    color: white;
+  }
 `

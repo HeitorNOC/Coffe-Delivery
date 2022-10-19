@@ -12,7 +12,7 @@ import { CartContext } from "../../context/CartContext";
 
 export function Success() {
 
-  const { paymentData } = useContext(CartContext)
+  const { paymentData, paymentMethod } = useContext(CartContext)
 
   return (
     <SuccessContainer1>
@@ -43,9 +43,7 @@ export function Success() {
             <div>
               <p>Pagamento na entrega</p>
               <p>
-                {paymentData.bank == 'bank' ?? <strong>Banco</strong>}
-                {paymentData.cash == 'dinheiro' ?? <strong>Dinheiro</strong>}
-                {paymentData.cred == 'crédito' ?? <strong>Cartão de Crédito</strong>}
+                {<strong>{paymentMethod}</strong>}
                 </p>
             </div>
           </BoxDetails>

@@ -1,12 +1,13 @@
 import { Bank, CreditCard, CurrencyDollar, MapPinLine, Minus, Money, Plus, Trash } from "phosphor-react";
 import { CardContainer, CheckoutContainer, ConfirmButton, EmptyContainer, Left, LeftCard, MidCard, Right, RightCard, TextDiv, Wrapper } from "./styles";
-import { FormProvider, useForm, useFormContext } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
 import { NewPaymentForm } from "./Components/NewPaymentForm";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useContext } from "react";
 import { CartContext } from "../../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 
 const newCycleFormValidationSchema = zod.object({
@@ -17,43 +18,47 @@ const newCycleFormValidationSchema = zod.object({
   bairro: zod.string().min(1, 'Informe o Bairro'),
   cidade: zod.string().min(1, 'Informe a Cidade'),
   uf: zod.string().min(1, 'Informe o Estado').max(2, 'Informe o Estado'),
-  cred: zod.boolean().optional(),
-  bank: zod.boolean().optional(),
-  cash: zod.boolean().optional(),
 })
 
 type NewFormPaymentData = zod.infer<typeof newCycleFormValidationSchema>
 
 export function Checkout() {
 
-  const { paymentFormDispatch, cart, increaseItem, decreaseItem, removeItem } = useContext(CartContext)
+  const { paymentFormDispatch, cart, increaseItem, decreaseItem, removeItem, changePayment } = useContext(CartContext)
 
  
-
-  const [selected1, setSelected1] = useState(false)
+  const navigate = useNavigate()
+  const [selected1, setSelected1] = useState(true)
   const [selected2, setSelected2] = useState(false)
   const [selected3, setSelected3] = useState(false)
 
   const newPaymentForm = useForm<NewFormPaymentData>({
     resolver: zodResolver(newCycleFormValidationSchema),
     defaultValues: {
-      rua: '',
-      bairro: '',
-      cidade: '',
-      cred: false,
-      bank: false,
-      cash: false,
+      comp: '',
+      
     },
   })
 
-  const { handleSubmit, watch, reset, register } = newPaymentForm
+  const { handleSubmit, reset } = newPaymentForm
 
   function handleFormDispatch(data: NewFormPaymentData) {
-    console.log(data)
+    
     paymentFormDispatch(data)
     reset()
   }
+  let count = 0
+  let priceTotal = 0
 
+  if (cart.length >= 1) {
+    cart.map((item) => {
+      count += item.quantity
+      return count
+    })
+    priceTotal = count * 9.9
+    
+  }
+  
   const style1 = {
     'display': 'flex',
     'padding': '16px',
@@ -77,9 +82,7 @@ export function Checkout() {
   const isSelected2 = selected2 ? style2 : style1
   const isSelected3 = selected3 ? style2 : style1
 
-  const onSubmit = (data:any, e:any) => console.log(data, e);
-  const onError = (errors:any, e:any) => console.log(errors, e);
-
+ 
   return (
     <>
       <CheckoutContainer>
@@ -88,7 +91,7 @@ export function Checkout() {
           <h2 className="right">Cafés selecionados</h2>
         </TextDiv>
         <Wrapper>
-          <form onSubmit={handleSubmit(onSubmit, onError)}>
+          <form onSubmit={handleSubmit(handleFormDispatch)}>
             <FormProvider {...newPaymentForm}>
               <Left>
                 <div className="LeftUpper">
@@ -114,7 +117,7 @@ export function Checkout() {
                       onClick={
                         () => {
                           if (selected1 == false) {
-                            
+                            changePayment('Cartão de Crédito')
                             setSelected1(true)
                             setSelected2(false)
                             setSelected3(false)
@@ -123,40 +126,27 @@ export function Checkout() {
                         }
                       }
                     >
-                      <input 
-                        type="radio"
-                        id="cred"
-                        {...register("cred")}
-                        name="payment" 
-                        value="cred"
-                        
-                      />
+                      
                       <CreditCard size={16} color="#8047F8" />
                       <p>Cartão de crédito</p>
                     </div>
                     <div
                       style={isSelected2}
-                      
+                     
                       onClick={
                         () => {
                           if (selected2 == false) {
-                            
+                              changePayment('Cartão de Débito')
                               setSelected1(false)
                               setSelected2(true)
                               setSelected3(false)
+                              
                             
                           }
                         }
                       }
                     >
-                      <input 
-                        type="radio"
-                        id="bank"
-                        {...register("bank")}
-                        name="payment"
-                        value="bank"
-                        
-                      />
+                      
                       <Bank size={16} color="#8047F8" />
                       <p>Cartão de débito</p>
                     </div>
@@ -166,22 +156,16 @@ export function Checkout() {
                       onClick={
                         () => {
                           if (selected3 == false) {
-                            
+                              changePayment('Dinheiro')
                               setSelected1(false)
                               setSelected2(false)
                               setSelected3(true)
+                              
                             
                           }
                         }
                       }
                     >
-                      <input 
-                        type="radio" 
-                        id="cash"
-                        {...register("cash")}
-                        name="payment"
-                        value="cash"
-                      />
                       <Money size={16} color="#8047F8" />
                       <p>Dinheiro</p>
                     </div>
@@ -240,7 +224,7 @@ export function Checkout() {
                 <div className="rightDown">
                   <div className="rightDownUp">
                     <p>Total de itens</p>
-                    <span>R$ 29,70</span>
+                    <span>R$ {priceTotal.toFixed(2)}</span>
                   </div>
                   <div className="rightDownMid">
                     <p>Entrega</p>
@@ -248,11 +232,11 @@ export function Checkout() {
                   </div>
                   <div className="rightDownDown">
                     <h2>Total</h2>
-                    <span>R$ 33,20</span>
+                    <span>R$ {priceTotal + 3.5}</span>
                   </div>
 
 
-                  <ConfirmButton type="submit"> CONFIRMAR PEDIDO</ConfirmButton>
+                  <ConfirmButton type="submit" onClick={() => navigate('/success')} > CONFIRMAR PEDIDO</ConfirmButton>
                 </div>
               </Right>
 

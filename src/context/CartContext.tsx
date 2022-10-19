@@ -1,4 +1,4 @@
-import { createContext, MouseEventHandler, ReactNode, useEffect, useReducer } from "react";
+import { createContext, MouseEventHandler, ReactNode, useEffect, useReducer, useState } from "react";
 import { Item, itemsReducer } from '../reducers/cart/reducer'
 import {
   addNewItemAction,
@@ -25,9 +25,6 @@ interface CreatePaymentInfoData {
   bairro: string
   cidade: string
   uf: string
-  cred?: boolean | undefined | string
-  bank?: boolean | undefined | string
-  cash?: boolean | undefined | string
 }
 
 interface CartContextType {
@@ -35,6 +32,8 @@ interface CartContextType {
   name: string
   quantity: number
   paymentData: CreatePaymentInfoData
+  paymentMethod: string
+  changePayment: (name:string) => void
   addNewItem: (data: CreateItemData) => void | MouseEventHandler<SVGSVGElement>
   removeItem: (name: string) => void | MouseEventHandler<SVGSVGElement>
   increaseItem: (data: CreateItemData) => void | MouseEventHandler<SVGSVGElement>
@@ -55,7 +54,8 @@ export function CartContextProvider({
     cart: [],
     name: '',
     quantity: 0,
-    paymentData : {}
+    paymentData : {},
+    
   }
   const [cartState, dispatch] = useReducer(
     itemsReducer,
@@ -79,6 +79,15 @@ export function CartContextProvider({
 
     localStorage.setItem('@ignite-coffe:cart-state-1.0.0', stateJSON)
   }, [cartState])
+
+  const [paymentMethod, setPaymentMethod] = useState('Cartão de Crédito')
+
+
+  function changePayment(name:string) {
+    setPaymentMethod(name)
+  }
+
+
 
   function addNewItem(data: CreateItemData) {
 
@@ -107,12 +116,16 @@ export function CartContextProvider({
   }
 
   function increaseItem(data: CreateItemData) {
-    
-    if(cart.includes(data) ==  true) {
-      dispatch(increaseItemAction(data))
+    if (cart.length != 0) {
+      cart.map((item) => {
+        if(item.name == data.name) {
+          dispatch(increaseItemAction(data))
+        }
+      })
     } else {
       addNewItem(data)
     }
+    
     
   }
 
@@ -125,7 +138,7 @@ export function CartContextProvider({
   }
 
   function paymentFormDispatch(data: CreatePaymentInfoData) {
-    if (data.cred == true) {
+    
       const newData = {
         cep: data.cep,
         rua: data.rua,
@@ -134,42 +147,12 @@ export function CartContextProvider({
         bairro: data.bairro,
         cidade: data.cidade,
         uf: data.uf,
-        cred: 'crédito',
-        bank: data.bank,
-        cash: data.cash
+        paymentMethod: paymentMethod
       }
       dispatch(getPaymentInfoAction(newData))
-    }
-    if (data.bank == true) {
-      const newData = {
-        cep: data.cep,
-        rua: data.rua,
-        num: data.num,
-        comp: data.comp,
-        bairro: data.bairro,
-        cidade: data.cidade,
-        uf: data.uf,
-        cred: data.cred,
-        bank: 'banco',
-        cash: data.cash
-      }
-      dispatch(getPaymentInfoAction(newData))
-    }
-    if (data.cash == true) {
-      const newData = {
-        cep: data.cep,
-        rua: data.rua,
-        num: data.num,
-        comp: data.comp,
-        bairro: data.bairro,
-        cidade: data.cidade,
-        uf: data.uf,
-        cred: data.cred,
-        bank: data.bank,
-        cash: 'dinheiro'
-      }
-      dispatch(getPaymentInfoAction(newData))
-    }
+  
+    
+    
   }
 
   return (
@@ -179,6 +162,8 @@ export function CartContextProvider({
         cart,
         name,
         paymentData,
+        paymentMethod,
+        changePayment,
         addNewItem,
         increaseItem,
         decreaseItem,

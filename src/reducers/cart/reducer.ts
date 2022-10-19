@@ -19,9 +19,7 @@ export interface PaymentInfo {
   bairro: string
   cidade: string
   uf: string
-  cred: boolean | undefined | string
-  bank: boolean | undefined | string
-  cash: boolean | undefined | string
+  paymentMethod: string
 }
 
 interface ItemState {
@@ -29,6 +27,7 @@ interface ItemState {
   name: string
   quantity: number
   paymentData: PaymentInfo
+  paymentMethod: string
 }
 
 export function itemsReducer(state: ItemState, action: any) {
@@ -36,32 +35,29 @@ export function itemsReducer(state: ItemState, action: any) {
     case ActionTypes.ADD_NEW_ITEM:
       return produce(state, (draft) => {
         const data = action.payload.newItem
-        if (draft.cart.includes(data)) {
-          draft.quantity += 1
-        } else {
           draft.cart.push(data)
           draft.name = action.payload.newItem.name
           draft.quantity += 1
-        }
+        
       })
       
     case ActionTypes.INCREASE_ITEM:
       return produce(state, (draft) => {
-        const currentItemIndex = state.cart.findIndex((item) => {
-          return item.name === draft.name
+        const currentItemIndex = draft.cart.findIndex((item) => {
+          return item.name === action.payload.item.name
         })
         
-          draft.cart[currentItemIndex].quantity++
+          draft.cart[currentItemIndex].quantity += 1
         }
       )
     case ActionTypes.DECREASE_ITEM:
       return produce(state, (draft) => {
         const currentItemIndex = state.cart.findIndex((item) => {
-          return item.name === state.name
+          return item.name === action.payload.item.name
         })
         if (draft.cart[currentItemIndex].quantity == 1) {
           draft.cart.filter((item) => {
-            return item.name == draft.name
+            return item.name == action.payload.item.name
           })
         } else {
           draft.cart[currentItemIndex].quantity -= 1
@@ -72,12 +68,19 @@ export function itemsReducer(state: ItemState, action: any) {
         draft.cart.map((item) => {
           if (action.payload.itemName == item.name) {
             draft.cart.pop()
+            draft.quantity -= 1
           }
         })
       })
     case ActionTypes.PAYMENT_FORM_DATA_DISPATCH:
       return produce(state, (draft) => {
-        return Object.assign(draft.paymentData, action.payload.data)
+        draft.paymentData.bairro = action.payload.data.bairro
+        draft.paymentData.cep = action.payload.data.cep
+        draft.paymentData.cidade = action.payload.data.cidade
+        draft.paymentData.comp = action.payload.data.comp
+        draft.paymentData.num = action.payload.data.num
+        draft.paymentData.rua = action.payload.data.rua
+        draft.paymentData.uf = action.payload.data.uf
       })
     default:
       return state
